@@ -15,21 +15,31 @@ opdataOut=[];
 objId=H5O.open(rootId,name,'H5P_DEFAULT');
 info=H5O.get_info(objId);
 H5O.close(objId);
+
+    opdataOut           = opdataIn                                      ;
+    if isempty( opdataOut ) 
+        opdataOut       = struct                                        ;
+    end
+    status              = 0                                             ;
+    number_inds         = find( name > 47 & name < 58 , '1' , 'first' ) ;
+    number_str          = name( number_inds )                           ;
+    number              = str2num( number_str )                         ;
+    opdataOut.fullNames = name                                          ;
 %
 % Check if the current object is the root group, and if not print
 % the full path name and type.
 %
 if (name(1) == '.')         % Root group, do not print '.' %
     fprintf ('  (Group)\n');
-    opdataOut   = opdataIn  ;
-    opdataOut.lastgroup 
-    status      = 0         ;
     return
 else
     switch (info.type)
         case H5ML.get_constant_value('H5O_TYPE_GROUP')
             disp ([name ' (Group)']);
-%             opdataOut   = struct( 'group' , name )
+            if strfind( name , 'Session' )
+                
+            end
+            opdataOut       = struct( 'group' , name )
             opdataOut.group = name                       ;
             
             
@@ -53,8 +63,8 @@ dot_with_inds   = strrep( dot_with_inds , ' ' , '' )        ;
 eval_string     = [ 'opdataIn' dot_with_inds ' = name' ]
 eval( eval_string )
 % opdataOut       = vertcat( opdataIn , opdataOut )
-in_string       = name
-opdataOut       = opdataIn                                      ;
+in_string       = name                                      ;
+opdataOut       = opdataIn                              	;
 
 status=0;
 end
